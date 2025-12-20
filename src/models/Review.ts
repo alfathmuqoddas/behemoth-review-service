@@ -1,11 +1,29 @@
-import { DataTypes, Model, UUIDV4 } from "sequelize";
+import { DataTypes, Model, Optional, UUIDV4 } from "sequelize";
 import sequelize from "../config/database";
+interface ReviewAttribute {
+  id: string;
+  movieId: string;
+  userId: string;
+  userName: string;
+  rating: number;
+  review: string;
+}
 
-class Review extends Model {
+interface ReviewCreationAttributes extends Optional<ReviewAttribute, "id"> {}
+
+class Review
+  extends Model<ReviewAttribute, ReviewCreationAttributes>
+  implements ReviewAttribute
+{
   public id!: string;
   public movieId!: string;
   public userId!: string;
+  public userName!: string;
+  public rating!: number;
   public review!: string;
+
+  public readonly createdAt!: Date;
+  public readonly updatedAt!: Date;
 }
 
 Review.init(
@@ -23,14 +41,25 @@ Review.init(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    review: {
+    userName: {
       type: DataTypes.STRING,
+      allowNull: false,
+    },
+    rating: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    review: {
+      type: DataTypes.TEXT,
       allowNull: false,
     },
   },
   {
     sequelize,
     modelName: "Review",
+    tableName: "reviews",
+    schema: "review_service",
+    timestamps: true,
   }
 );
 

@@ -1,9 +1,9 @@
-import pino from 'pino';
+import pino from "pino";
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
+const isDevelopment = process.env.NODE_ENV !== "production";
 
 const logger = pino({
-  level: process.env.PINO_LOG_LEVEL || (isDevelopment ? 'debug' : 'info'),
+  level: process.env.PINO_LOG_LEVEL || (isDevelopment ? "debug" : "info"),
   formatters: {
     level: (label) => ({ level: label }),
   },
@@ -18,14 +18,15 @@ const logger = pino({
     res: pino.stdSerializers.res,
     err: pino.stdSerializers.err,
   },
-  transport: isDevelopment ? {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-      ignore: 'pid,hostname',
-    },
-  } : undefined, // In production, pino outputs JSON to stdout by default
+  transport: isDevelopment
+    ? {
+        target: "pino-pretty",
+        options: {
+          colorize: true,
+          ignore: "pid,hostname",
+        },
+      }
+    : undefined,
 });
 
 export default logger;
-

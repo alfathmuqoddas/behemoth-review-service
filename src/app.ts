@@ -4,6 +4,7 @@ import reviewRoutes from "./routes/reviewRoutes";
 import logger from "./config/logger";
 import { register } from "./config/metrics";
 import { metricsMiddleware } from "./middleware/metricsMiddleware";
+import { errorHandler } from "./middleware/errorHandler";
 
 const app: Application = express();
 
@@ -12,15 +13,13 @@ app.use(metricsMiddleware);
 
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello, World!");
-});
-
 app.get("/metrics", async (req: Request, res: Response) => {
   res.set("Content-Type", register.contentType);
   res.end(await register.metrics());
 });
 
-app.use("/api/review", reviewRoutes);
+app.use("/", reviewRoutes);
+
+app.use(errorHandler);
 
 export default app;
