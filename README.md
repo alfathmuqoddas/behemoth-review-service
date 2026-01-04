@@ -49,23 +49,31 @@ The service is designed to work with an external authentication service (e.g., `
     ```
 2.  Run the Docker image:
     ```bash
-    docker run -d -p 3010:3000 --env-file ./.env -e DB_HOST=host.docker.internal -v /home/alfath/keys:/usr/src/app/keys --add-host=host.docker.internal:host-gateway --name behemoth-review-service localhost:5000/behemoth-nodejs-review-service
+    docker run -d -p 3030:3030 --env-file ./.env -v /home/alfath/keys:/usr/src/app/keys --network your_shared_network --name behemoth-review-service localhost:5000/behemoth-nodejs-review-service
+    ```
+3.  Tips run the development server on docker container (make sure your postgres container is running on the same network)
+    ```bash
+    docker run --rm -v $(pwd):/app -w /app -p 3030:3030 --network proxy node:lts-alpine sh -c "npm install && npm run dev -- --host 0.0.0.0"
     ```
 
 ### Configuration
 
 1.  Create a `.env` file in the root directory based on the following template:
 
-    ```env
-    # Server Configuration
-    PORT=3000
+### Configuration
 
-    # Database Configuration
-    DB_HOST=127.0.0.1
+1.  Create a `.env` file in the root of the project. Refer to `.env.example` for all available options.
+
+    ```env
+    DB_HOST=shared_postgres (make sure the container and postgres container in the same network)
+    DB_HOST=localhost (if you are running postgres locally)
     DB_PORT=5432
     DB_NAME=postgres
     DB_USER=postgres
     DB_PASSWORD=your_password
+    PORT=3030
+    NODE_ENV=development
+    DB_DIALECT=postgres
     ```
 
 2.  **Generate RSA Keys:**
@@ -195,3 +203,23 @@ The service is designed to work with an external authentication service (e.g., `
 - **URL:** `/metrics`
 - **Method:** `GET`
 - **Description:** Exposes application metrics for Prometheus scraping.
+
+### Miscelaneous
+
+#### Liveness Check
+
+- **URL:** `/health/liveness`
+- **Method:** `GET`
+- **Description:** Returns a 200 OK response if the service is live.
+
+#### Readiness Check
+
+- **URL:** `/health/readyness`
+- **Method:** `GET`
+- **Description:** Returns a 200 OK response if the service is ready.
+
+#### Startup Check
+
+- **URL:** `/health/startup`
+- **Method:** `GET`
+- **Description:** Returns a 200 OK response if the service is started.
