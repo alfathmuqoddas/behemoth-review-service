@@ -5,6 +5,7 @@ interface ReviewAttribute {
   movieId: string;
   userId: string;
   userName: string;
+  avatar: string;
   rating: number;
   review: string;
 }
@@ -19,6 +20,7 @@ class Review
   public movieId!: string;
   public userId!: string;
   public userName!: string;
+  public avatar!: string;
   public rating!: number;
   public review!: string;
 
@@ -44,6 +46,9 @@ Review.init(
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    avatar: {
+      type: DataTypes.STRING,
     },
     rating: {
       type: DataTypes.INTEGER,
