@@ -5,7 +5,7 @@ import {
   collectDefaultMetrics,
 } from "prom-client";
 
-collectDefaultMetrics({ register, prefix: "review_service_" });
+collectDefaultMetrics({ register });
 
 export const httpRequestsTotal = new Counter({
   name: "http_requests_total",
