@@ -8,7 +8,7 @@ PORT       ?= 3030
 NETWORK    ?= proxy
 TAG        ?= latest
 SERVICE_NAME := behemoth-review-service
-REGISTRY     := registry.local:5000
+REGISTRY     := registry.localhost
 FULL_IMAGE   := $(REGISTRY)/$(SERVICE_NAME):$(TAG)
 KEYS_PATH    := /home/alfath/Downloads/behemoth/secrets/keys
 
